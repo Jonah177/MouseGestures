@@ -55,15 +55,22 @@ enum Actions {
     /// Re-sends a right-click at the point where the user originally pressed,
     /// tagged so our own event tap lets it through untouched.
     static func replayRightClick(at point: CGPoint) {
-        let source = CGEventSource(stateID: .hidSystemState)
-        for type in [CGEventType.rightMouseDown, .rightMouseUp] {
-            guard let event = CGEvent(mouseEventSource: source,
-                                      mouseType: type,
-                                      mouseCursorPosition: point,
-                                      mouseButton: .right) else { continue }
-            event.setIntegerValueField(.mouseEventClickState, value: 1)
-            event.setIntegerValueField(.eventSourceUserData, value: Config.syntheticMarker)
-            event.post(tap: .cghidEventTap)
+        postRightMouse(.rightMouseDown, at: point)
+        // Real clicks have a short gap between press and release. Some apps
+        // (Catalyst apps like Messages) mishandle a down+up arriving at the same instant.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+            postRightMouse(.rightMouseUp, at: point)
         }
+    }
+
+    private static func postRightMouse(_ type: CGEventType, at point: CGPoint) {
+        let source = CGEventSource(stateID: .hidSystemState)
+        guard let event = CGEvent(mouseEventSource: source,
+                                  mouseType: type,
+                                  mouseCursorPosition: point,
+                                  mouseButton: .right) else { return }
+        event.setIntegerValueField(.mouseEventClickState, value: 1)   // "single click", like real hardware
+        event.setIntegerValueField(.eventSourceUserData, value: Config.syntheticMarker)
+        event.post(tap: .cghidEventTap)
     }
 }
