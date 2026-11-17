@@ -61,6 +61,7 @@ enum Actions {
                                       mouseType: type,
                                       mouseCursorPosition: point,
                                       mouseButton: .right) else { continue }
+            event.setIntegerValueField(.mouseEventClickState, value: 1)
             event.setIntegerValueField(.eventSourceUserData, value: Config.syntheticMarker)
             event.post(tap: .cghidEventTap)
         }
