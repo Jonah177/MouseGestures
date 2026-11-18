@@ -89,7 +89,7 @@ nonisolated enum Config {
     /// A plain right-click (no drag) is always replayed as a normal right-click.
     static let rightDragActions: [Direction: GestureAction] = [
         .up:    .openApp("/System/Applications/Mission Control.app"),
-//        .down:  .keystroke(CGKeyCode(kVK_ANSI_W), .maskCommand),                          // close tab/window
+        .down:  .keystroke(CGKeyCode(kVK_ANSI_M), .maskCommand),                          // close tab/window
         .left:  .keystroke(CGKeyCode(kVK_RightArrow),  arrowFlags.union(.maskControl)),    // previous Desktop
         .right: .keystroke(CGKeyCode(kVK_LeftArrow), arrowFlags.union(.maskControl)),    // next Desktop
     ]
