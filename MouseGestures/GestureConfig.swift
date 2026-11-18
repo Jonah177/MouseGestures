@@ -76,7 +76,7 @@ nonisolated enum Config {
     // MARK: - Back side button (hold + drag)
 
     /// What a plain click (no drag) on the back button does.
-    static let backClickAction: GestureAction = goBack
+    static let backClickAction: GestureAction = .openApp("/System/Applications/Weather.app") // Now this opens app of choice
 
     /// Drags not listed here (up/down) fall back to `backClickAction`.
     static let backDragActions: [Direction: GestureAction] = [
@@ -89,7 +89,7 @@ nonisolated enum Config {
     /// A plain right-click (no drag) is always replayed as a normal right-click.
     static let rightDragActions: [Direction: GestureAction] = [
         .up:    .openApp("/System/Applications/Mission Control.app"),
-        .down:  .keystroke(CGKeyCode(kVK_ANSI_M), .maskCommand),                          // close tab/window
+        .down:  .keystroke(CGKeyCode(kVK_ANSI_M), .maskCommand),                          // Minimizes the current tab
         .left:  .keystroke(CGKeyCode(kVK_RightArrow),  arrowFlags.union(.maskControl)),    // previous Desktop
         .right: .keystroke(CGKeyCode(kVK_LeftArrow), arrowFlags.union(.maskControl)),    // next Desktop
     ]
